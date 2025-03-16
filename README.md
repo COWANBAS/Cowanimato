@@ -77,8 +77,6 @@ A privacidade digital nunca pode ser garantida 100%, pois sempre há formas suti
 
 # Navegadores que recomendo para aumentar privacidade
 
-MIN: https://github.com/minbrowser/min
-
-TOR: https://github.com/TheTorProject/gettorbrowser
-
-CROMITE: https://github.com/uazo/cromite
+- [Min](https://github.com/minbrowser/min)
+- [Tor](https://github.com/TheTorProject/gettorbrowser)
+- [Cromite](https://github.com/uazo/cromite)
