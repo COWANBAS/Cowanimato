@@ -75,6 +75,10 @@ A privacidade digital nunca pode ser garantida 100%, pois sempre há formas suti
 
   O script aumenta significativamente sua privacidade online ao bloquear rastreadores, cookies, e alterar identificações, mas não oferece anonimato total devido à natureza das tecnologias de rastreamento e limitações de navegação. Para uma privacidade mais robusta, recomendo o uso de outras ferramentas, como VPNs, navegadores focados em privacidade (como Tor), e isolamento de redes e dispositivos, um navegador similar que estou utilizando bastante ultimamente e o "Min" ele tem como foco ser um navegador leve e de privacidade.
 
+# Navegadores que recomendo para aumentar privacidade
 
+MIN: https://github.com/minbrowser/min
 
-  
+TOR: https://github.com/TheTorProject/gettorbrowser
+
+CROMITE: https://github.com/uazo/cromite
