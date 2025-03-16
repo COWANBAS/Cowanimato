@@ -42,3 +42,39 @@ Este script é projetado para tentar  melhorar a privacidade e segurança ao nav
 **Como funciona?** Quando o script detecta a chamada para "gl.getParameter", ele responde com valores falsificados para o modelo da GPU e fabricante, evitando que sites usem essas informações para identificar o dispositivo.
 
 ![image](https://github.com/user-attachments/assets/8c0d74c7-d20f-4b4b-bcdb-90a4beb1ac32)
+
+Este script tenta fornecer uma camada extra de privacidade, dificultando a coleta de dados pessoais e a criação de perfis de usuário através de rastreadores, Ele funciona em vários navegadores compatíveis com Tampermonkey ou outras extensões de gerenciamento de scripts.
+
+# FUNCIONALIDADE
+
+Embora o script acima forneça uma série de medidas para aumentar sua privacidade, ele nunca será 100% eficaz por várias razões. 
+
+1. Dependência de medidas que podem ser contornadas
+
+Algumas técnicas de fingerprinting e rastreamento podem ser mais sofisticadas do que o bloqueio de cookies ou a alteração do User-Agent. Por exemplo:
+
+- Fingerprinting avançado pode usar fontes de dados como comportamentos de digitação, a forma como o usuário interage com a página (como o tempo de resposta ou os padrões de movimento do mouse), que o script não altera.
+- Rastreamento de IP e geolocalização: Mesmo que o script bloqueie cookies e rastreadores, o seu endereço IP e a localização aproximada ainda podem ser obtidos pelos sites, dependendo do tipo de rastreamento implementado.
+
+2. Limitações de ferramentas de navegação
+Navegadores e extensões como Tampermonkey ou Greasemonkey não podem alterar aspectos básicos do sistema operacional ou da rede de maneira tão profunda quanto seria necessário para garantir 100% de anonimato. Por exemplo:
+
+- O endereço IP continua sendo exposto, a menos que você use uma rede privada virtual (VPN) ou um sistema de proxy.
+- As interações em tempo real (como comportamento de navegação e clicagem) podem ser monitoradas por tecnologias como o fingerprinting de comportamento, que o script não consegue bloquear totalmente.
+
+3. Configurações e permissões do navegador
+Alguns navegadores, como o Chrome, têm comportamentos que podem sobrescrever ou contornar configurações feitas por scripts de usuários, especialmente se a política de segurança for alterada ou se o navegador tiver permissões de acesso específicas. Além disso, a configuração de privacidade e segurança pode ser diferente em cada navegador.
+
+4. Impossibilidade de proteger completamente a identidade
+A privacidade digital nunca pode ser garantida 100%, pois sempre há formas sutis de identificar comportamentos e padrões:
+
+- Rastreamento por metadados: Sites podem identificar seu comportamento com base na hora do acesso, frequência de navegação, interações com diferentes sites e até mesmo os dados dos dispositivos conectados.
+- Impressões digitais de dispositivos e sensores: Além de WebGL e Canvas, outros dados, como sensores de movimento (giroscópio e acelerômetro), podem ser usados para identificar o dispositivo e o usuário.
+
+  # CONCLUSÃO
+
+  O script aumenta significativamente sua privacidade online ao bloquear rastreadores, cookies, e alterar identificações, mas não oferece anonimato total devido à natureza das tecnologias de rastreamento e limitações de navegação. Para uma privacidade mais robusta, recomendo o uso de outras ferramentas, como VPNs, navegadores focados em privacidade (como Tor), e isolamento de redes e dispositivos, um navegador similar que estou utilizando bastante ultimamente e o "Min" ele tem como foco ser um navegador leve e de privacidade.
+
+
+
+  
