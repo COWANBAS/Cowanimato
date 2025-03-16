@@ -6,4 +6,4 @@ Este script é projetado para tentar  melhorar a privacidade e segurança ao nav
 
 - O script desativa o armazenamento de cookies e os remove periodicamente. Isso impede que os sites armazenem informações sobre você e seu comportamento de navegação.
 
-Como funciona? O código define o "document.cookie" como vazio e o redefine a cada segundo para evitar que cookies de rastreamento sejam armazenados.
+**Como funciona?** O código define o "document.cookie" como vazio e o redefine a cada segundo para evitar que cookies de rastreamento sejam armazenados.
