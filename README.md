@@ -20,7 +20,7 @@ Este script é projetado para tentar  melhorar a privacidade e segurança ao nav
 
 #Alteração do User-Agent
 
-O User-Agent é uma string enviada pelo navegador que contém informações sobre o dispositivo e o navegador que você está usando. Ao modificá-lo, o script simula que você está usando um navegador diferente, dificultando o rastreamento.
+- O User-Agent é uma string enviada pelo navegador que contém informações sobre o dispositivo e o navegador que você está usando. Ao modificá-lo, o script simula que você está usando um navegador diferente, dificultando o rastreamento.
 
 **Como funciona?** O código altera o "navigator.userAgent" para um valor genérico que representa o Chrome rodando no Windows 10. Isso faz com que os sites vejam um "falso" navegador, impedindo a coleta de dados mais específicos.
 
@@ -29,7 +29,7 @@ O User-Agent é uma string enviada pelo navegador que contém informações sobr
 
 # Impedir fingerprinting através do Canvas
 
-O fingerprinting é uma técnica usada para identificar e rastrear dispositivos com base em características únicas, como o comportamento do Canvas (usado para desenhar na tela). O script altera o comportamento de getImageData para modificar a forma como o navegador gera dados gráficos, dificultando a coleta de informações únicas sobre o seu dispositivo.
+- O fingerprinting é uma técnica usada para identificar e rastrear dispositivos com base em características únicas, como o comportamento do Canvas (usado para desenhar na tela). O script altera o comportamento de getImageData para modificar a forma como o navegador gera dados gráficos, dificultando a coleta de informações únicas sobre o seu dispositivo.
 
 **Como funciona?** Quando o script detecta o uso do Canvas, ele altera os dados gerados pelo método "getImageData" para fornecer um resultado "falsificado", distorcendo a identidade do dispositivo.
 
@@ -37,7 +37,7 @@ O fingerprinting é uma técnica usada para identificar e rastrear dispositivos 
 
 # Impedir fingerprinting através do WebGL
 
-O WebGL é outra técnica usada para identificar dispositivos, baseando-se nas informações gráficas do hardware. O script altera o comportamento do WebGL para mascarar o tipo de GPU que o site vê.
+- O WebGL é outra técnica usada para identificar dispositivos, baseando-se nas informações gráficas do hardware. O script altera o comportamento do WebGL para mascarar o tipo de GPU que o site vê.
 
 **Como funciona?** Quando o script detecta a chamada para "gl.getParameter", ele responde com valores falsificados para o modelo da GPU e fabricante, evitando que sites usem essas informações para identificar o dispositivo.
 
