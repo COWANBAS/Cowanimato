@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name          Cowanimato
-// @description   Um UserScript que tenta fazer com que você fique anônimo ao máximo na internet.
+// @description   Um UserScript que tenta fazer com que você fique anonimo ao maximo na internet.
 // @namespace     CowanNIMO
 // @license       CowBas
-// @version       2.0
+// @version       3.0
 // @author        Cowanbas
 // @match         *://*/*
 // @run-at        document-start
@@ -12,83 +12,104 @@
 (function () {
   'use strict';
 
-  // Função utilitária para redefinir propriedades de objetos
+  // Bloqueia cookies de rastreamento
+  Object.defineProperty(document, 'cookie', {
+    get: () => "",
+    set: () => { },
+    configurable: true
+  });
+
+  setInterval(() => {
+    try {
+      Object.defineProperty(document, 'cookie', {
+        get: () => "",
+        set: () => { },
+        configurable: true
+      });
+    } catch (e) { }
+  }, 1000);
+
+  // Bloqueia Referer (evita que sites saibam de onde você veio)
+  Object.defineProperty(document, 'referrer', { get: () => '', configurable: true });
+
+  // Altera User-Agent e outras propriedades para evitar fingerprinting
+  const fakeUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36';
+
+  Object.defineProperty(navigator, 'userAgent', { get: () => fakeUA, configurable: true });
+  Object.defineProperty(navigator, 'platform', { get: () => 'Win32', configurable: true });
+  Object.defineProperty(navigator, 'language', { get: () => 'en-US', configurable: true });
+  Object.defineProperty(navigator, 'webdriver', { get: () => false, configurable: true });
+  Object.defineProperty(navigator, 'plugins', { get: () => [], configurable: true });
+  Object.defineProperty(navigator, 'hardwareConcurrency', { get: () => 4, configurable: true });
+
+  // Impede fingerprinting básico (WebGL, Canvas, Audio)
+  const blockFingerprinting = () => {
+    const protectCanvas = (ctx) => {
+      if (!ctx) return;
+      const originalGetImageData = ctx.getImageData;
+      ctx.getImageData = function (x, y, w, h) {
+        const data = originalGetImageData.call(this, x, y, w, h);
+        for (let i = 0; i < data.data.length; i += 4) {
+          data.data[i] ^= 0xFF;
+        }
+        return data;
+      };
+    };
+    protectCanvas(CanvasRenderingContext2D.prototype);
+
+    // Bloqueia WebGL Fingerprinting
+    const fakeWebGL = (gl) => {
+      if (!gl) return;
+      const originalGetParameter = gl.getParameter;
+      gl.getParameter = function (param) {
+        if (param === 37445) return 'Intel OpenGL Fake';
+        if (param === 37446) return 'Fake GPU Model';
+        return originalGetParameter.call(gl, param);
+      };
+    };
+    fakeWebGL(WebGLRenderingContext.prototype);
+    fakeWebGL(WebGL2RenderingContext.prototype);
+  };
+  blockFingerprinting();
+
+  // Função utilitária para redefinir propriedades de objetos (usada nas novas proteções)
   function redefine(obj, prop, value) {
     try {
       Object.defineProperty(obj, prop, { get: () => value, set: () => { }, configurable: true });
     } catch (e) { }
   }
 
-  // Bloqueia cookies de rastreamento
-  redefine(document, 'cookie', '');
-
-  setInterval(() => redefine(document, 'cookie', ''), 1000);
-
-  // Bloqueia Referer
-  redefine(document, 'referrer', '');
-
-  // Altera propriedades do navigator
-  const fakeUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36';
-  redefine(navigator, 'userAgent', fakeUA);
-  redefine(navigator, 'platform', 'Win32');
-  redefine(navigator, 'language', 'en-US');
+  // Acrescenta propriedades extras ao navigator
   redefine(navigator, 'languages', ['en-US', 'en']);
-  redefine(navigator, 'webdriver', false);
-  redefine(navigator, 'plugins', []);
-  redefine(navigator, 'hardwareConcurrency', 4);
   redefine(navigator, 'deviceMemory', 8);
 
-  // Impede fingerprinting básico (Canvas, WebGL, Audio)
-  function blockFingerprinting() {
-    // Canvas
-    function protectCanvas(ctx) {
-      if (!ctx) return;
-      const originalGetImageData = ctx.getImageData;
-      ctx.getImageData = function (x, y, w, h) {
-        const data = originalGetImageData.call(this, x, y, w, h);
-        for (let i = 0; i < data.data.length; i += 4) {
-          data.data[i] ^= 0xFF; // altera pixels
-        }
-        return data;
-      };
-      // Protege toDataURL e toBlob (técnicas comuns)
+  // Canvas extra - Protege toDataURL e toBlob
+  if (window.CanvasRenderingContext2D) {
+    const ctxProto = CanvasRenderingContext2D.prototype;
+    if (!ctxProto._anonimato_patched) {
       const scramble = str => str.split('').reverse().join('');
-      const origToDataURL = ctx.toDataURL;
-      ctx.toDataURL = function () {
+      const origToDataURL = ctxProto.toDataURL;
+      ctxProto.toDataURL = function () {
         return scramble(origToDataURL.apply(this, arguments));
       };
-      const origToBlob = ctx.toBlob;
-      ctx.toBlob = function (callback, ...args) {
+      const origToBlob = ctxProto.toBlob;
+      ctxProto.toBlob = function (callback, ...args) {
         origToBlob.call(this, function (blob) {
           callback(blob);
         }, ...args);
       };
-    }
-    if (window.CanvasRenderingContext2D) protectCanvas(CanvasRenderingContext2D.prototype);
-
-    // WebGL
-    function fakeWebGL(proto) {
-      if (!proto) return;
-      const originalGetParameter = proto.getParameter;
-      proto.getParameter = function (param) {
-        if (param === 37445) return 'Intel OpenGL Fake';
-        if (param === 37446) return 'Fake GPU Model';
-        return originalGetParameter.call(this, param);
-      };
-    }
-    fakeWebGL(window.WebGLRenderingContext && WebGLRenderingContext.prototype);
-    fakeWebGL(window.WebGL2RenderingContext && WebGL2RenderingContext.prototype);
-
-    // Audio
-    if (window.OfflineAudioContext) {
-      const origStartRendering = OfflineAudioContext.prototype.startRendering;
-      OfflineAudioContext.prototype.startRendering = function () {
-        this.oncomplete = null;
-        return origStartRendering.apply(this, arguments);
-      };
+      ctxProto._anonimato_patched = true;
     }
   }
-  blockFingerprinting();
+
+  // Protege AudioContext (fingerprinting)
+  if (window.OfflineAudioContext) {
+    const origStartRendering = OfflineAudioContext.prototype.startRendering;
+    OfflineAudioContext.prototype.startRendering = function () {
+      this.oncomplete = null;
+      return origStartRendering.apply(this, arguments);
+    };
+  }
 
   // Remove ou neutraliza APIs de rastreamento
   const blockAPIs = [
@@ -140,4 +161,5 @@
     redefine(window.screen, 'height', 1080);
     redefine(window.screen, 'colorDepth', 24);
   }
+
 })();
